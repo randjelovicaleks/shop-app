@@ -1,5 +1,6 @@
 import Product from '../models/product.js';
 import { error } from '../models/error.js';
+import { validationResult } from 'express-validator';
 
 export const findAllProducts = (req, res, next) => {
     Product.find()
@@ -22,6 +23,10 @@ export const findProductById = (req, res, next) => {
 };
 
 export const createProduct = (req, res, next) => {
+    const validationErrors = validationResult(req);
+    if (!validationErrors.isEmpty())
+        return res.status(400).json({ errors: validationErrors.array() });
+
     let product = new Product();
     product.name = req.body.name;
     product.description = req.body.description;
@@ -37,6 +42,10 @@ export const createProduct = (req, res, next) => {
 };
 
 export const updateProduct = (req, res, next) => {
+    const validationErrors = validationResult(req);
+    if (!validationErrors.isEmpty())
+        return res.status(400).json({ errors: validationErrors.array() });
+        
     const name = req.body.name;
     const description = req.body.description;
     const price = req.body.price;
