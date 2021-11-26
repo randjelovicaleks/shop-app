@@ -77,7 +77,7 @@ export const deleteProduct = (req, res, next) => {
         });
 };
 
-export const searchProduct = (req, res, next) => {
+export const searchProducts = (req, res, next) => {
     const name = req.query.name;
     const condition = name ? { name: { $regex: new RegExp(name), $options: 'i'}} : {};
 

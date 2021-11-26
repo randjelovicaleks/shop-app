@@ -1,10 +1,10 @@
 import express from 'express';
-import { findAllProducts, findProductById, createProduct, updateProduct, deleteProduct, searchProduct } from '../controllers/product.js';
-import { body } from 'express-validator/check/index.js';
+import { findAllProducts, findProductById, createProduct, updateProduct, deleteProduct, searchProducts } from '../controllers/product.js';
+import { body } from 'express-validator';
 
 const router = express.Router();
 
-const urlPrefix = '/api/products';
+const urlPrefix = '/api/v1/products';
 
 //Retrieve all products
 router.get(urlPrefix, findAllProducts);
@@ -40,6 +40,6 @@ router.put(`${urlPrefix}/:id`,  [
 router.delete(`${urlPrefix}/:id`, deleteProduct);
 
 //Search products by name
-router.get(urlPrefix, searchProduct);
+router.get(`${urlPrefix}/search`, searchProducts);
 
 export default router;

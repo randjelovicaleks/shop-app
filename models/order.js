@@ -15,7 +15,11 @@ const orderSchema = Schema({
                 requred: true 
             }
         }
-    ]
+    ],
+    creationDate: {
+        type: Date,
+        default: Date.now()
+    }
 });
 
 export default mongoose.model('Order', orderSchema);

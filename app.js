@@ -3,6 +3,11 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import productRoutes from './routes/product.js';
 
+import swaggerUi from 'swagger-ui-express';
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+const swaggerDoc = require('./swagger.json');
+
 dotenv.config();
 
 const app = express();
@@ -24,6 +29,8 @@ mongoose.connect(dbConnectionString, { useNewUrlParser: true })
     .catch(err => {
         console.log("Cannot connect to the database!", err);
     });
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc, { explorer: true }));
 
 const port = process.env.PORT;
 app.listen(port, () => {

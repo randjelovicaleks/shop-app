@@ -1,0 +1,244 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "Simple Shop API",
+        "description": "A simple shop API",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+          "url": "http://localhost:8080/api/v1",
+          "description": "Local server"
+        }
+    ],
+    "tags": [
+        {
+          "name": "Product operations"
+        }
+    ],
+    "paths": {
+        "/products": {
+            "get": {
+                "tags": ["Product operations"],
+                "description": "Returns a list of products",
+                "operationId": "findAllProducts",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Product"
+                                    }                                   
+                                }                                
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": ["Product operations"],
+                "description": "Creates a new product",
+                "operationId": "createProduct",
+                "parameters": [
+                    {
+                        "name": "product",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/components/schemas/Product"
+                        },
+                        "required": true 
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "New product created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Product"
+                                }                                
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/products/{id}": {
+            "get": {
+                "tags": ["Product operations"],
+                "description": "Returns product by id",
+                "operationId": "findProductById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true 
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Product"
+                                }                                
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Product is not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                } 
+                            }
+                        }
+                    }
+                } 
+            },
+            "put": {
+                "tags": ["Product operations"],
+                "description": "Updates an existing product",
+                "operationId": "updateProduct",
+                "parameters": [
+                    {                           
+                        "name": "id",
+                        "in": "path",
+                        "required": true                    
+                    },
+                    {
+                        "name": "product",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/components/schemas/Product"
+                        },
+                        "required": true 
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "An existing product updated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Product"
+                                }                                
+                            }
+                        }   
+                    },
+                    "404": {
+                        "description": "Product is not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                } 
+                            }
+                        }    
+                    }
+                }
+            },
+            "delete": {
+                "tags": ["Product operations"],
+                "description": "Deletes an existing product",
+                "operationId": "deleteProduct",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true 
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "An existing product deleted",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Product"
+                                }                                
+                            }
+                        }   
+                    },
+                    "404": {
+                        "description": "Product is not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                } 
+                            }
+                        }    
+                    }
+                }
+            }
+        },
+        "/products/search": {
+            "get": {
+                "tags": ["Product operations"],
+                "description": "Returns filtered list of products by name",
+                "operationId": "searchProducts",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "required": true 
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Product"
+                                    }                                   
+                                }                                
+                            }
+                        }
+                    }
+                }
+            }
+        }  
+    },
+    "components": {
+        "schemas": {
+            "Product": {
+                "type": "object",
+                "properties": {
+                    "_id": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "price": {
+                        "type": "number"
+                    }
+                },
+                "required": ["_id", "name", "description", "price"]            
+            },
+            "Error": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    },
+                    "statusCode": {
+                        "type": "string"
+                    }
+                }
+            }    
+        }
+    }
+}
