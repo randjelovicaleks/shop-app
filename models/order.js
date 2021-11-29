@@ -3,6 +3,11 @@ import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 const orderSchema = Schema({
+    userId: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
     products: [
         {
             productId: { 
@@ -16,6 +21,10 @@ const orderSchema = Schema({
             }
         }
     ],
+    totalPrice: {
+        type: Number,
+        default: 0
+    },
     creationDate: {
         type: Date,
         default: Date.now()
