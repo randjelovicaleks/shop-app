@@ -1,5 +1,5 @@
 import Product from '../models/product.js';
-import { error } from '../models/error.js';
+import { error } from '../utils/error.js';
 import { validationResult } from 'express-validator';
 
 export const findAllProducts = (req, res, next) => {

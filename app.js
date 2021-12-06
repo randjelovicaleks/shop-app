@@ -2,6 +2,9 @@ import express from 'express';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import productRoutes from './routes/product.js';
+import orderRoutes from './routes/order.js';
+import authRoutes from './routes/auth.js';
+import { auth } from './middleware/authentication.js';
 
 import swaggerUi from 'swagger-ui-express';
 import { createRequire } from 'module';
@@ -13,7 +16,13 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use(authRoutes);
+
+app.use(auth);
+
 app.use(productRoutes);
+app.use(orderRoutes);
 
 app.use((error, req, res, next) => {
     const status = error.statusCode || 500;

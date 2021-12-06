@@ -9,16 +9,16 @@ const orderSchema = Schema({
         required: true
     },
     products: [
-        {
-            productId: { 
+        {           
+            _id: {
                 type: Schema.Types.ObjectId, 
                 ref: 'Product', 
-                required: true 
+                required: true
             },
-            quantity: { 
-                type: Number, 
-                requred: true 
-            }
+            quantity: {
+                type: Number,
+                default: 0
+            }          
         }
     ],
     totalPrice: {
