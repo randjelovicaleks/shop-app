@@ -1,5 +1,5 @@
-export const error = (statusCode, message) => {
-    const error = new Error(message);
+export const customError = (statusCode, message) => {
+    let error = new Error(message);
     error.statusCode = statusCode;
     throw error;
 };

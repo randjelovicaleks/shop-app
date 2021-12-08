@@ -2,6 +2,7 @@ import User from '../models/user.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { validationResult } from 'express-validator';
+import { customError } from '../utils/error.js';
 
 export const signUp = async (req, res, next) => {
     const validationErrors = validationResult(req);
@@ -39,10 +40,10 @@ export const signIn = (req, res, next) => {
     }
 
     const email = req.body.email;
-    User.findOne({ email })
+    User.findOne({ email: email })
         .then(user => {
             if (!user) {
-                error(404, 'User is not found');
+                customError(404, 'User is not found');
             }
             return user;
         })
@@ -52,13 +53,14 @@ export const signIn = (req, res, next) => {
             bcrypt.compare(password, hashPassword)
                 .then(isSame => {
                     if (!isSame) {
-                        error(400, 'Incorrect password');
-                    }                       
-                    else {
-                        const token = jwt.sign({ userId: user._id, role: user.role }, 'supersecret', { expiresIn: '1h' });
-                        res.status(200).json(token);
-                    }
+                        customError(400, 'Incorrect password');
+                    }                                         
+                    const token = jwt.sign({ userId: user._id, role: user.role }, 'supersecret', { expiresIn: '1h' });
+                    res.status(200).json(token);                   
                 })
+                .catch(error => {
+                    next(error);
+                });
         })
         .catch(error => {
             next(error);

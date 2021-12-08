@@ -13,7 +13,7 @@ router.post(`${urlPrefix}/sign-up`, [
     body('address').notEmpty(),
     body('phoneNumber').notEmpty(),
     body('email').notEmpty().isEmail().normalizeEmail().custom((value) => {
-        User.find({ value })
+        User.find({ email: value })
             .then(user => {
                 if (user.value)
                     throw new Error(`User with this email:${value} already exists`);

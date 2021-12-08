@@ -1,5 +1,5 @@
 import Product from '../models/product.js';
-import { error } from '../utils/error.js';
+import { customError } from '../utils/error.js';
 import { validationResult } from 'express-validator';
 
 export const findAllProducts = (req, res, next) => {
@@ -13,7 +13,7 @@ export const findProductById = (req, res, next) => {
     Product.findById(req.params.id)
         .then(product => {
             if (!product) {
-                error(404, 'Product is not found');
+                customError(404, 'Product is not found');
             } 
             res.status(200).json(product);            
         })
@@ -52,7 +52,7 @@ export const updateProduct = (req, res, next) => {
     Product.findByIdAndUpdate(req.params.id, { name: name, description: description, price: price }, { new: true, rawResult: true})
         .then(product => {
             if (!product.lastErrorObject.updatedExisting && !product.value) {
-                error(404, 'Product is not found');
+                customError(404, 'Product is not found');
             }
             res.status(200).json(product.value);
         })
@@ -65,7 +65,7 @@ export const deleteProduct = (req, res, next) => {
     Product.findById(req.params.id)
         .then(product => {
             if (!product) {
-                error(404, 'Product is not found');
+                customError(404, 'Product is not found');
             }
             return Product.deleteOne(product);
         })
@@ -84,5 +84,5 @@ export const searchProducts = (req, res, next) => {
     Product.find(condition)
         .then(products => {
             res.status(200).json(products);
-        });
+        })
 };

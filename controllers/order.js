@@ -1,5 +1,5 @@
 import Order from '../models/order.js';
-import { error } from '../utils/error.js';
+import { customError } from '../utils/error.js';
 import Product from '../models/product.js';
 import { validationResult } from 'express-validator';
 
@@ -14,7 +14,7 @@ export const findOrderById = (req, res, next) => {
     Order.findById(req.params.id)
         .then(order => {
             if (!order) {
-                error(404, 'Order is not found');
+                customError(404, 'Order is not found');
             }
             return res.status(200).json(order); 
         })
@@ -77,6 +77,21 @@ export const updateOrder = async (req, res, next) => {
                 error(404, 'Order is not found');
             }
             res.status(200).json(order.value);
+        })
+        .catch(error => {
+            next(error);
+        });
+};
+
+export const deleteOrder = (req, res, next) => {
+    Order.findById(req.params.id)
+        .then(order => {
+            if (!order)
+                customError("404","Order is not found");
+            return Order.deleteOne(order);
+        })
+        .then(() => {
+            res.status(200).json({ message: "Order is successfully deleted." });
         })
         .catch(error => {
             next(error);

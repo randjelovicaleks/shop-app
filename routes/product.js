@@ -10,6 +10,9 @@ const urlPrefix = '/api/v1/products';
 //Retrieve all products
 router.get(urlPrefix, authorize('user', 'admin'), findAllProducts);
 
+//Search products by name
+router.get(`${urlPrefix}/search`, authorize('user','admin'), searchProducts);
+
 //Retreive single product
 router.get(`${urlPrefix}/:id`, authorize('user', 'admin'), findProductById);
 
@@ -39,8 +42,5 @@ router.put(`${urlPrefix}/:id`,  [
 
 //Remove product
 router.delete(`${urlPrefix}/:id`, authorize('admin'), deleteProduct);
-
-//Search products by name
-router.get(`${urlPrefix}/search`, authorize('user','admin'), searchProducts);
 
 export default router;

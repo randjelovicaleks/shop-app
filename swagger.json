@@ -11,14 +11,92 @@
           "description": "Local server"
         }
     ],
-    "tags": [
-        {
-          "name": "Product operations"
-        }
-    ],
     "paths": {
+        "/sign-up": {
+            "post": {
+                "tags": ["Auth operations"],
+                "description": "Registration for new user",
+                "operationId": "signUp",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }                                                               
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "All fields are required",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }                                   
+                            }                                
+                        }
+                    }
+                }
+            }
+        },
+        "/sign-in": {
+            "post": {
+                "tags": ["Auth operations"],
+                "description": "Login",
+                "operationId": "signIn",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserLoginData"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                }                                                                
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "All fields are required",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"                                  
+                                }                              
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/products": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "tags": ["Product operations"],
                 "description": "Returns a list of products",
                 "operationId": "findAllProducts",
@@ -35,23 +113,48 @@
                                 }                                
                             }
                         }
+                    },
+                    "401": {
+                        "description": "Invalid token",
+                        "content": {
+                            "application/json": {
+                                "schema": {  
+                                    "$ref": "#/components/schemas/Error"                                  
+                                }                                
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {  
+                                    "$ref": "#/components/schemas/Error"                                  
+                                }                              
+                            }
+                        }
                     }
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "tags": ["Product operations"],
                 "description": "Creates a new product",
                 "operationId": "createProduct",
-                "parameters": [
-                    {
-                        "name": "product",
-                        "in": "body",
-                        "schema": {
-                            "$ref": "#/components/schemas/Product"
-                        },
-                        "required": true 
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Product"
+                            }
+                        }
                     }
-                ],
+                },
                 "responses": {
                     "201": {
                         "description": "New product created",
@@ -62,12 +165,37 @@
                                 }                                
                             }
                         }
+                    },
+                    "401": {
+                        "description": "Invalid token",
+                        "content": {
+                            "application/json": {
+                                "schema": {  
+                                    "$ref": "#/components/schemas/Error"                                  
+                                }                                
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {  
+                                    "$ref": "#/components/schemas/Error"                                  
+                                }                              
+                            }
+                        }
                     }
                 }
             }
         },
         "/products/{id}": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "tags": ["Product operations"],
                 "description": "Returns product by id",
                 "operationId": "findProductById",
@@ -98,10 +226,35 @@
                                 } 
                             }
                         }
+                    },
+                    "401": {
+                        "description": "Invalid token",
+                        "content": {
+                            "application/json": {
+                                "schema": {  
+                                    "$ref": "#/components/schemas/Error"                                  
+                                }                                
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {  
+                                    "$ref": "#/components/schemas/Error"                                  
+                                }                              
+                            }
+                        }
                     }
                 } 
             },
             "put": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "tags": ["Product operations"],
                 "description": "Updates an existing product",
                 "operationId": "updateProduct",
@@ -110,16 +263,18 @@
                         "name": "id",
                         "in": "path",
                         "required": true                    
-                    },
-                    {
-                        "name": "product",
-                        "in": "body",
-                        "schema": {
-                            "$ref": "#/components/schemas/Product"
-                        },
-                        "required": true 
                     }
                 ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Product"
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
                         "description": "An existing product updated",
@@ -140,10 +295,35 @@
                                 } 
                             }
                         }    
+                    },
+                    "401": {
+                        "description": "Invalid token",
+                        "content": {
+                            "application/json": {
+                                "schema": {  
+                                    "$ref": "#/components/schemas/Error"                                  
+                                }                                
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {  
+                                    "$ref": "#/components/schemas/Error"                                  
+                                }                              
+                            }
+                        }
                     }
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "tags": ["Product operations"],
                 "description": "Deletes an existing product",
                 "operationId": "deleteProduct",
@@ -160,8 +340,13 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/Product"
-                                }                                
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }                               
                             }
                         }   
                     },
@@ -174,12 +359,37 @@
                                 } 
                             }
                         }    
+                    },
+                    "401": {
+                        "description": "Invalid token",
+                        "content": {
+                            "application/json": {
+                                "schema": {  
+                                    "$ref": "#/components/schemas/Error"                                  
+                                }                                
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {  
+                                    "$ref": "#/components/schemas/Error"                                  
+                                }                              
+                            }
+                        }
                     }
                 }
             }
         },
         "/products/search": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "tags": ["Product operations"],
                 "description": "Returns filtered list of products by name",
                 "operationId": "searchProducts",
@@ -203,13 +413,365 @@
                                 }                                
                             }
                         }
+                    },
+                    "401": {
+                        "description": "Invalid token",
+                        "content": {
+                            "application/json": {
+                                "schema": {  
+                                    "$ref": "#/components/schemas/Error"                                  
+                                }                                
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {  
+                                    "$ref": "#/components/schemas/Error"                                  
+                                }                              
+                            }
+                        }
                     }
                 }
             }
-        }  
+        },
+        "/orders": {
+            "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": ["Order operations"],
+                "description": "Returns a list of users's orders",
+                "operationId": "findAllOrders",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Order"
+                                    }                                   
+                                }                                
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid token",
+                        "content": {
+                            "application/json": {
+                                "schema": {  
+                                    "$ref": "#/components/schemas/Error"                                  
+                                }                                
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {  
+                                    "$ref": "#/components/schemas/Error"                                  
+                                }                              
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": ["Order operations"],
+                "description": "Creates a new order",
+                "operationId": "createOrder",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {                               
+                                "$ref": "#/components/schemas/ShortOrderData"                                
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "New order created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Order"
+                                }                                
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid token",
+                        "content": {
+                            "application/json": {
+                                "schema": {  
+                                    "$ref": "#/components/schemas/Error"                                  
+                                }                                
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {  
+                                    "$ref": "#/components/schemas/Error"                                  
+                                }                              
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/orders/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": ["Order operations"],
+                "description": "Returns order by id",
+                "operationId": "findOrderById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true 
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Order"
+                                }                                
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Order is not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                } 
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid token",
+                        "content": {
+                            "application/json": {
+                                "schema": {  
+                                    "$ref": "#/components/schemas/Error"                                  
+                                }                                
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {  
+                                    "$ref": "#/components/schemas/Error"                                  
+                                }                              
+                            }
+                        }
+                    }
+                } 
+            },
+            "put": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": ["Order operations"],
+                "description": "Updates an existing order",
+                "operationId": "updateOrder",
+                "parameters": [
+                    {                           
+                        "name": "id",
+                        "in": "path",
+                        "required": true                    
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {                               
+                                "$ref": "#/components/schemas/ShortOrderData"                                
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "An existing order updated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Order"
+                                }                                
+                            }
+                        }   
+                    },
+                    "404": {
+                        "description": "Order is not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                } 
+                            }
+                        }    
+                    },
+                    "401": {
+                        "description": "Invalid token",
+                        "content": {
+                            "application/json": {
+                                "schema": {  
+                                    "$ref": "#/components/schemas/Error"                                  
+                                }                                
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {  
+                                    "$ref": "#/components/schemas/Error"                                  
+                                }                              
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": ["Order operations"],
+                "description": "Deletes an existing order",
+                "operationId": "deleteOrder",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true 
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "An existing order deleted",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }                             
+                            }
+                        }   
+                    },
+                    "404": {
+                        "description": "Order is not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                } 
+                            }
+                        }    
+                    },
+                    "401": {
+                        "description": "Invalid token",
+                        "content": {
+                            "application/json": {
+                                "schema": {  
+                                    "$ref": "#/components/schemas/Error"                                  
+                                }                                
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {  
+                                    "$ref": "#/components/schemas/Error"                                  
+                                }                              
+                            }
+                        }
+                    }
+                }
+            }
+        }
     },
     "components": {
         "schemas": {
+            "User": {
+                "type": "object",
+                "properties": {
+                    "_id": {
+                        "type": "string"
+                    },
+                    "firstName": {
+                        "type": "string"
+                    },
+                    "lastName": {
+                        "type": "string"
+                    },
+                    "address": {
+                        "type": "string"
+                    },
+                    "phoneNumber": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                },
+                "required": ["firstName", "lastName", "address", "phoneNumber", "email", "password"]
+            },
+            "UserLoginData": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                },
+                "required": ["email", "password"]
+            },
             "Product": {
                 "type": "object",
                 "properties": {
@@ -226,7 +788,50 @@
                         "type": "number"
                     }
                 },
-                "required": ["_id", "name", "description", "price"]            
+                "required": ["name", "description", "price"]            
+            },
+            "ShortProductData": {
+                "type": "object",
+                "properties": {
+                    "_id": {
+                        "type": "string"
+                    },
+                    "quantity": {
+                        "type": "number"
+                    }
+                },
+                "required": ["_id", "quantity"]
+            },
+            "Order": {
+                "type": "object",
+                "properties": {
+                    "_id": {
+                        "type": "string"
+                    },
+                    "userId": {
+                        "type": "string"
+                    },
+                    "products": {
+                        "type": "array",   
+                        "items": {
+                            "$ref": "#/components/schemas/ShortProductData"
+                        }                                   
+                    },
+                    "totalPrice": {
+                        "type": "number"
+                    }
+                }
+            },
+            "ShortOrderData": {
+                "type": "object",
+                "properties": {
+                    "products": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ShortProductData"
+                        }   
+                    }
+                }
             },
             "Error": {
                 "type": "object",
@@ -239,6 +844,13 @@
                     }
                 }
             }    
+        },
+        "securitySchemes": {
+            "Bearer": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
         }
     }
 }

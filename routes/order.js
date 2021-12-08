@@ -1,5 +1,5 @@
 import express from 'express';
-import { findAllOrders, findOrderById, createOrder, updateOrder } from '../controllers/order.js';
+import { findAllOrders, findOrderById, createOrder, updateOrder, deleteOrder } from '../controllers/order.js';
 import { body } from 'express-validator';
 import { authorize } from '../middleware/authorization.js';
 
@@ -22,5 +22,8 @@ router.post(urlPrefix, [
 router.put(`${urlPrefix}/:id`, [
     body('products').notEmpty()
 ], authorize('user'), updateOrder);
+
+//Delete order by id
+router.delete(`${urlPrefix}/:id`, authorize('user'), deleteOrder);
 
 export default router;

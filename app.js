@@ -17,6 +17,8 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc, { explorer: true }));
+
 app.use(authRoutes);
 
 app.use(auth);
@@ -38,8 +40,6 @@ mongoose.connect(dbConnectionString, { useNewUrlParser: true })
     .catch(err => {
         console.log("Cannot connect to the database!", err);
     });
-
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc, { explorer: true }));
 
 const port = process.env.PORT;
 app.listen(port, () => {

@@ -25,6 +25,7 @@ If you want to run this application, follow the next steps:
 * Install MongoDb (v5.0.4)
 * Start MongoDb
 * Create .env file in the root folder of the app and set variables for PORT and DB_CONNECTION_STRING
+* Change port which you setup also in swagger.json file 
 * Run npm install
 * Run nodemon app
 * Open swagger in the browser typing this url with port you setup: http://localhost:PORT/api-docs/ and see all the routes in the app
