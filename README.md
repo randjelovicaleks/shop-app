@@ -24,7 +24,7 @@ If you want to run this application, follow the next steps:
 * Check if you have installed Node.js (v14.18.1)
 * Install MongoDb (v5.0.4)
 * Start MongoDb
-* Create .env file in the root folder of the app and set variables for PORT and DB_CONNECTION_STRING
+* Create .env file in the root folder of the app and set variables for PORT and DB_URL
 * Change port which you setup also in swagger.json file 
 * Run npm install
 * Run nodemon app

@@ -32,8 +32,8 @@ app.use((error, req, res, next) => {
     res.status(status).json({ message: message });
 });
 
-const dbConnectionString = process.env.DB_CONNECTION_STRING;
-mongoose.connect(dbConnectionString, { useNewUrlParser: true })
+const dbUrl = process.env.DB_URL;
+mongoose.connect(dbUrl, { useNewUrlParser: true })
     .then(() => {
         console.log('DB is successfully connected.');
     })
