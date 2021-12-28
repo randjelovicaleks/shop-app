@@ -6,7 +6,7 @@ import { customError } from '../utils/error.js';
 
 export const signUp = async (req, res, next) => {
     const validationErrors = validationResult(req);
-    if (!validationErrors.isEmpty) {
+    if (!validationErrors.isEmpty()) {
         return res.status(400).json({ errors: validationErrors });
     }
 
@@ -35,7 +35,7 @@ export const signUp = async (req, res, next) => {
 
 export const signIn = (req, res, next) => {
     const validationErrors = validationResult(req);
-    if (!validationErrors.isEmpty) {
+    if (!validationErrors.isEmpty()) {
         return res.status(400).json({ errors: validationErrors });
     }
 

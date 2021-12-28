@@ -12,13 +12,10 @@ router.post(`${urlPrefix}/sign-up`, [
     body('lastName').trim().notEmpty(),
     body('address').notEmpty(),
     body('phoneNumber').notEmpty(),
-    body('email').notEmpty().isEmail().normalizeEmail().custom((value) => {
-        User.find({ email: value })
-            .then(user => {
-                if (user.value)
-                    throw new Error(`User with this email:${value} already exists`);
-                return true;
-            });
+    body('email').notEmpty().isEmail().normalizeEmail().custom(async (value) => {
+        const existingUser = User.exists({ email: value });
+        if (existingUser)
+        throw new Error(`User with this email:${value} already exists`);
       }),
     body('password').notEmpty()
 ], signUp);
