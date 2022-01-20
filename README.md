@@ -11,7 +11,7 @@ Shop app includes the following functionalities:
 
 ## Users
 
-It supports two types of users, admin and regular user. 
+It supports two types of user, admin and regular user. 
 
 * There is only one admin in the system, and he/she can log in and add new products, edit and delete them. 
 * Regular user can register and log in in the system, then he/she can search products, create and edit orders. 
