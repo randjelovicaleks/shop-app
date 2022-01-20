@@ -1,10 +1,10 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import mongoose from 'mongoose';
 import productRoutes from './routes/product.js';
 import orderRoutes from './routes/order.js';
 import authRoutes from './routes/auth.js';
 import { auth } from './middleware/authentication.js';
+import db from './configs/db.js';
 
 import swaggerUi from 'swagger-ui-express';
 import { createRequire } from 'module';
@@ -20,9 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc, { explorer: true }));
 
 app.use(authRoutes);
-
 app.use(auth);
-
 app.use(productRoutes);
 app.use(orderRoutes);
 
@@ -32,14 +30,7 @@ app.use((error, req, res, next) => {
     res.status(status).json({ message: message });
 });
 
-const dbUrl = process.env.DB_URL;
-mongoose.connect(dbUrl, { useNewUrlParser: true })
-    .then(() => {
-        console.log('DB is successfully connected.');
-    })
-    .catch(err => {
-        console.log("Cannot connect to the database!", err);
-    });
+db();
 
 const port = process.env.PORT;
 app.listen(port, () => {

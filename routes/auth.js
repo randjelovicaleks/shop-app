@@ -1,7 +1,6 @@
 import express from 'express';
 import { signUp, signIn } from '../controllers/auth.js';
 import { body } from 'express-validator';
-import User from '../models/user.js';
 
 const router = express.Router();
 
@@ -12,11 +11,7 @@ router.post(`${urlPrefix}/sign-up`, [
     body('lastName').trim().notEmpty(),
     body('address').notEmpty(),
     body('phoneNumber').notEmpty(),
-    body('email').notEmpty().isEmail().normalizeEmail().custom(async (value) => {
-        const existingUser = User.exists({ email: value });
-        if (existingUser)
-        throw new Error(`User with this email:${value} already exists`);
-      }),
+    body('email').notEmpty().isEmail().normalizeEmail(),
     body('password').notEmpty()
 ], signUp);
 
